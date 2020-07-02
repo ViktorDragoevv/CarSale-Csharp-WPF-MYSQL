@@ -1,0 +1,89 @@
+﻿<Window x:Class="Bank.MainWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bank"
+        mc:Ignorable="d"
+        Title="MainWin" Height="600" Width="1400"       WindowStyle="None" ResizeMode="NoResize" MouseDown="Window_MouseDown">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="btv" />
+
+        <!-- style a top level menu item -->
+        <ControlTemplate x:Key="VsMenuTop" TargetType="MenuItem">
+            <StackPanel TextBlock.FontSize="15px" Height="40">
+                <!-- label, icons, etc. -->
+                <Label Content="{TemplateBinding Header}" Margin="5" Foreground="White" />
+
+                <!-- sub items -->
+                <Popup IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False">
+                    <Border BorderThickness="1" Background="White" BorderBrush="red">
+                        <StackPanel IsItemsHost="True" />
+                    </Border>
+                </Popup>
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver"  Value="True">
+                                <Setter Property="Background" Value="Gray" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+            </StackPanel>
+        </ControlTemplate>
+
+        <!-- style a non-top level menu item -->
+        <ControlTemplate x:Key="VsMenuSub" TargetType="MenuItem">
+            <DockPanel TextBlock.FontSize="15px" x:Name="panel">
+                <!-- label, icons, etc. -->
+                <Image Source="{Binding Icon, RelativeSource={RelativeSource TemplatedParent}}" Width="20" Margin="5,0" />
+                <Label Content="{TemplateBinding Header}" Foreground="Black" Margin="0,5,5,5" />
+
+
+                <!-- sub items -->
+                <Popup IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False" Placement="Right" >
+                    <Border BorderThickness="1" Background="White" BorderBrush="SlateGray">
+                        
+                        <StackPanel IsItemsHost="True" />
+                    </Border>
+                </Popup>
+            </DockPanel>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" TargetName="panel" Value="SlateGray" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- some base stuff -->
+        <Style TargetType="Menu">
+
+
+            <Setter Property="Background" Value="LightSlateGray" />
+            
+            <Setter Property="Height" Value="40px" />
+        </Style>
+
+    </Window.Resources>
+
+    <!-- the real app and real menu -->
+    <StackPanel>
+        <Menu IsMainMenu="True" >
+            
+            <MenuItem Header="_Меню" Template="{StaticResource VsMenuTop}" >
+                <MenuItem  Header="_Изход от администраторския акаунт" Template="{StaticResource VsMenuSub}" Icon="images/log-out.png" Click="MenuItem_Click_1" />
+                <MenuItem  Header="_Изход от приложението" Template="{StaticResource VsMenuSub}" Icon="images/log-out.png" Click="MenuItem_Click_2"  />
+            </MenuItem>
+            <MenuItem Header="_Добави" Template="{StaticResource VsMenuTop}">
+                <MenuItem  Header="_Добави/Редактирай/Изтрий Оператор" Template="{StaticResource VsMenuSub}" Icon="images/nurse.png" Click="MenuItem_Click" />
+                <MenuItem   Header="_Добави нова компания/нов цвят/нов клас" Template="{StaticResource VsMenuSub}" Icon="images/test-tubes.png" Click="MenuItem_Click_3" />
+                
+            </MenuItem>
+        </Menu>
+        <Frame Name="adminMainFrame" Height="759" NavigationUIVisibility="Hidden"/>
+
+    </StackPanel>
+    
+</Window>
